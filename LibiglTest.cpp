@@ -19,7 +19,7 @@ void main() {
 	vector<vec3> vertices,samples;
 	vector<int> indices;
 
-	igl::readOBJ("head.obj", V, F);
+	igl::readOBJ("misc/head.obj", V, F);
 	iglToVectors(vertices, indices);
 	samples=pointSampling(vertices, indices);
 
