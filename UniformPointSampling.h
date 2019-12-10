@@ -18,20 +18,18 @@ vector<vec3> pointSampling(vector<vec3> vertices,vector<int> indices) {
 	vector<vec3> sampleList;
 	int sampleNum = 500;
 	int triNum = indices.size() / 3;
-	vector<double> areas;
+	double currentArea;
 
 	srand(time(NULL));
 
-	//calculate each triangle's area
-	for (int i = 0; i < indices.size(); i=i+3) {
-		areas.push_back(triArea(vertices[indices[i]], vertices[indices[i+1]], vertices[indices[i+2]]));		
-	}
-
 	//generate a vector of cumulative areas to remove size bias from face selection
-	vector<double> cumulative(areas.size(), 0.0);
-	cumulative[0] = areas[0];
-	for (int i = 1; i < areas.size(); i++) {
-		cumulative[i] = cumulative[i - 1] + areas[i];
+	vector<double> cumulative(triNum, 0.0);
+	cumulative[0]=triArea(vertices[indices[0]], vertices[indices[1]], vertices[indices[2]]);
+
+	//calculate each triangle's area and add to cumulative
+	for (int i = 3, j=1; i < indices.size(); i=i+3,j++) {
+		currentArea=triArea(vertices[indices[i]], vertices[indices[i+1]], vertices[indices[i+2]]);		
+		cumulative[j] = cumulative[j - 1] + currentArea;
 	}
 
 	for (int j = 0; j < sampleNum; j++) {
